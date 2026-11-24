@@ -1,0 +1,1979 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L’Avocat du diable — Débat &amp; Expression (B2)</title>
+  <style>
+    /* ==========================================================================
+       VARIABLES & DESIGN TOKENS (Haute lisibilité vidéoprojecteur & mobile)
+       ========================================================================== */
+    :root {
+      --bg-page: #F6F4EF;
+      --bg-card: #FFFFFF;
+      --bg-subtle: #EFECE5;
+      --text-main: #1C2029;
+      --text-muted: #555D6E;
+      --border-light: #DDD7CB;
+      --border-strong: #C2B9A9;
+
+      --accent-primary: #B42E25;      /* Rouge brique / Avocat du diable */
+      --accent-primary-hover: #92231B;
+      --accent-primary-soft: #FCECEB;
+
+      --player-a-color: #0F6A5F;      /* Vert émeraude profond */
+      --player-a-bg: #F0FAF8;
+      --player-a-border: #B3E0D9;
+
+      --player-b-color: #A84A14;      /* Ambre brûlé */
+      --player-b-bg: #FEF6F0;
+      --player-b-border: #F2CEB3;
+
+      --valid-bg: #E6F6EC;
+      --valid-border: #2A9D5C;
+      --valid-text: #17663A;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow-sm: 0 2px 6px rgba(28, 32, 41, 0.05);
+      --shadow-md: 0 8px 24px rgba(28, 32, 41, 0.08);
+      --shadow-lg: 0 16px 40px rgba(28, 32, 41, 0.14);
+
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-serif: Georgia, "Times New Roman", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ==========================================================================
+       EN-TÊTE & BARRE DE CONTRÔLES
+       ========================================================================== */
+    header {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-light);
+      padding: 1rem 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--accent-primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      font-weight: 700;
+      box-shadow: 0 3px 10px rgba(180, 46, 37, 0.25);
+      flex-shrink: 0;
+    }
+
+    .brand h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .deck-status {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .counter-pill {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* ==========================================================================
+       BOUTONS GÉNÉRIQUES
+       ========================================================================== */
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+      transition: all 0.18s ease;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.55rem 1rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 1px solid var(--border-light);
+      background: var(--bg-card);
+      color: var(--text-main);
+    }
+
+    .btn:hover:not(:disabled) {
+      background: var(--bg-subtle);
+      border-color: var(--border-strong);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--accent-primary);
+      color: #FFFFFF;
+      border-color: var(--accent-primary);
+      padding: 0.85rem 1.75rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      box-shadow: 0 4px 14px rgba(180, 46, 37, 0.28);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--accent-primary-hover);
+      border-color: var(--accent-primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(180, 46, 37, 0.35);
+    }
+
+    .btn-sm {
+      padding: 0.38rem 0.75rem;
+      font-size: 0.82rem;
+    }
+
+    .btn-danger {
+      color: var(--accent-primary);
+      border-color: #ECC5C2;
+      background: #FFF8F8;
+    }
+
+    .btn-danger:hover:not(:disabled) {
+      background: var(--accent-primary-soft);
+      border-color: var(--accent-primary);
+    }
+
+    /* ==========================================================================
+       CONTENEUR PRINCIPAL
+       ========================================================================== */
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* ==========================================================================
+       PANNEAU DE CONFIGURATION (CATÉGORIES & OPTIONS DE TIRAGE)
+       ========================================================================== */
+    .config-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .config-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
+
+    .categories-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .cat-chip {
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      border: 1.5px solid var(--border-light);
+      background: var(--bg-page);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .cat-chip:hover {
+      border-color: var(--border-strong);
+      color: var(--text-main);
+    }
+
+    .cat-chip.active {
+      background: var(--text-main);
+      color: #FFFFFF;
+      border-color: var(--text-main);
+    }
+
+    .cat-count {
+      font-size: 0.75rem;
+      opacity: 0.75;
+      font-weight: 500;
+    }
+
+    .options-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--bg-subtle);
+    }
+
+    .selectors-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      align-items: center;
+    }
+
+    .selector-box {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .selector-box label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .segmented {
+      display: inline-flex;
+      background: var(--bg-subtle);
+      padding: 3px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-light);
+    }
+
+    .segmented button {
+      min-width: 34px;
+      height: 32px;
+      padding: 0 0.5rem;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .segmented button:hover {
+      color: var(--text-main);
+    }
+
+    .segmented button.active {
+      background: var(--bg-card);
+      color: var(--accent-primary);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* ==========================================================================
+       CARTE DE DÉBAT PRINCIPALE
+       ========================================================================== */
+    .stage-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stage-card.animate-draw {
+      animation: cardReveal 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes cardReveal {
+      0% {
+        opacity: 0;
+        transform: translateY(14px) scale(0.985);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state h2 {
+      font-size: 1.45rem;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-state p {
+      max-width: 540px;
+      margin: 0 auto 1.5rem;
+      font-size: 0.98rem;
+    }
+
+    .topic-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 1.15rem;
+    }
+
+    .topic-category-badge {
+      display: inline-block;
+      background: var(--accent-primary-soft);
+      color: var(--accent-primary);
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+    }
+
+    .topic-text {
+      font-family: var(--font-serif);
+      font-size: clamp(1.45rem, 2.6vw, 2.05rem);
+      font-weight: 700;
+      line-height: 1.32;
+      color: var(--text-main);
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px dashed var(--border-light);
+    }
+
+    /* ==========================================================================
+       ENCARTS JOUEUR A / JOUEUR B
+       ========================================================================== */
+    .roles-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 760px) {
+      .roles-grid {
+        grid-template-columns: 1fr;
+      }
+      .stage-card {
+        padding: 1.25rem;
+      }
+    }
+
+    .player-box {
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      border: 1.5px solid transparent;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .player-box.player-a {
+      background: var(--player-a-bg);
+      border-color: var(--player-a-border);
+    }
+
+    .player-box.player-b {
+      background: var(--player-b-bg);
+      border-color: var(--player-b-border);
+    }
+
+    .player-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .player-name {
+      font-size: 1.08rem;
+      font-weight: 800;
+    }
+
+    .player-a .player-name { color: var(--player-a-color); }
+    .player-b .player-name { color: var(--player-b-color); }
+
+    .role-tag {
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      background: #FFFFFF;
+      border: 1px solid currentColor;
+    }
+
+    .player-a .role-tag { color: var(--player-a-color); }
+    .player-b .role-tag { color: var(--player-b-color); }
+
+    .constraint-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .constraint-heading {
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
+
+    .badges-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    /* Badges cliquables (connecteurs & défis argumentatifs) */
+    .item-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-light);
+      color: var(--text-main);
+      padding: 0.45rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.16s ease;
+      position: relative;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+
+    .item-badge:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-1px);
+    }
+
+    .item-badge.used {
+      background: var(--valid-bg);
+      border-color: var(--valid-border);
+      color: var(--valid-text);
+    }
+
+    .item-badge.used .item-label {
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+    }
+
+    .item-badge .check-mark {
+      display: none;
+      font-weight: 900;
+      color: var(--valid-text);
+    }
+
+    .item-badge.used .check-mark {
+      display: inline;
+    }
+
+    /* Bouton d'aide « ? » sur les défis argumentatifs */
+    .challenge-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      max-width: 100%;
+    }
+
+    .challenge-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .help-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--bg-subtle);
+      color: var(--text-muted);
+      border: 1px solid var(--border-light);
+      font-size: 0.78rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .help-btn:hover,
+    .help-btn.open {
+      background: var(--text-main);
+      color: #FFFFFF;
+      border-color: var(--text-main);
+    }
+
+    .challenge-hint {
+      display: none;
+      font-size: 0.82rem;
+      line-height: 1.4;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.9);
+      border-left: 3px solid var(--border-strong);
+      padding: 0.4rem 0.65rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .challenge-hint.visible {
+      display: block;
+    }
+
+    /* ==========================================================================
+       CHRONOMÈTRE INTÉGRÉ
+       ========================================================================== */
+    .timer-bar {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 1.15rem 1.5rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .timer-bar.time-up {
+      background: var(--accent-primary-soft);
+      border-color: var(--accent-primary);
+      animation: pulseAlert 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseAlert {
+      from { box-shadow: 0 0 0 0 rgba(180, 46, 37, 0.25); }
+      to   { box-shadow: 0 0 0 8px rgba(180, 46, 37, 0); }
+    }
+
+    .timer-phases {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .phase-btn {
+      padding: 0.45rem 0.9rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 700;
+      border: 1.5px solid var(--border-light);
+      color: var(--text-muted);
+      background: var(--bg-page);
+    }
+
+    .phase-btn.active {
+      background: var(--text-main);
+      color: #FFFFFF;
+      border-color: var(--text-main);
+    }
+
+    .duration-input-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .duration-input-wrap input {
+      width: 60px;
+      padding: 0.35rem 0.5rem;
+      border: 1.5px solid var(--border-light);
+      border-radius: 6px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-align: center;
+      color: var(--text-main);
+      background: var(--bg-card);
+    }
+
+    .timer-display-group {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .timer-clock {
+      font-variant-numeric: tabular-nums;
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: var(--text-main);
+      min-width: 105px;
+      text-align: center;
+    }
+
+    .timer-bar.time-up .timer-clock {
+      color: var(--accent-primary);
+    }
+
+    .time-up-badge {
+      display: none;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .timer-bar.time-up .time-up-badge {
+      display: inline-block;
+    }
+
+    /* ==========================================================================
+       ESPACE ORGANISATEUR (PIED DE PAGE)
+       ========================================================================== */
+    footer {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-light);
+      padding: 1rem 1.5rem;
+      margin-top: auto;
+    }
+
+    .organizer-bar {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .organizer-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* ==========================================================================
+       MODALES (GESTION DES LISTES & CONFIRMATIONS)
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 24, 33, 0.55);
+      backdrop-filter: blur(2px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 1000;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-dialog {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 760px;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 1.15rem 1.5rem;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .modal-header h3 {
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .modal-body {
+      padding: 1.25rem 1.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      background: var(--bg-page);
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .form-control {
+      flex: 1;
+      min-width: 180px;
+      padding: 0.6rem 0.8rem;
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.92rem;
+      color: var(--text-main);
+      background: #FFFFFF;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+    }
+
+    .manage-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .manage-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.7rem 0.9rem;
+      background: var(--bg-page);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+    }
+
+    .manage-item-content {
+      flex: 1;
+      font-size: 0.9rem;
+    }
+
+    .manage-item-sub {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    .manage-item-actions {
+      display: flex;
+      gap: 0.35rem;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================================================
+       NOTIFICATIONS TOAST
+       ========================================================================== */
+    .toast-container {
+      position: fixed;
+      bottom: 1.25rem;
+      right: 1.25rem;
+      z-index: 1200;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--text-main);
+      color: #FFFFFF;
+      padding: 0.75rem 1.15rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-md);
+      animation: toastIn 0.25s ease;
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       EN-TÊTE
+       ======================================================================== -->
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">⚖️</div>
+        <div>
+          <h1>L’Avocat du diable</h1>
+          <span>Débat argumenté, connecteurs &amp; défis d'expression — Niveau B2</span>
+        </div>
+      </div>
+
+      <div class="deck-status">
+        <div id="deckCounter" class="counter-pill">64 / 64 cartes restantes</div>
+        <button id="resetDeckBtn" class="btn btn-sm" type="button" title="Remettre toutes les cartes dans la pioche">
+          ↺ Réinitialiser la pioche
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       CONTENU PRINCIPAL
+       ======================================================================== -->
+  <main>
+
+    <!-- Panneau de configuration : Catégories + Sélecteurs -->
+    <section class="config-panel" aria-label="Paramètres du tirage">
+      <div class="config-top">
+        <span class="section-label">Catégories actives</span>
+        <button id="toggleAllCatsBtn" class="btn btn-sm" type="button">Tout désélectionner</button>
+      </div>
+
+      <div id="categoriesContainer" class="categories-grid"></div>
+
+      <div class="options-bar">
+        <div class="selectors-group">
+          <div class="selector-box">
+            <label>Connecteurs / joueur :</label>
+            <div id="connectorCountSelector" class="segmented" role="group" aria-label="Nombre de connecteurs par joueur">
+              <button type="button" data-val="0">0</button>
+              <button type="button" data-val="1">1</button>
+              <button type="button" data-val="2">2</button>
+              <button type="button" data-val="3" class="active">3</button>
+              <button type="button" data-val="4">4</button>
+              <button type="button" data-val="5">5</button>
+            </div>
+          </div>
+
+          <div class="selector-box">
+            <label>Défis argumentatifs / joueur :</label>
+            <div id="challengeCountSelector" class="segmented" role="group" aria-label="Nombre de défis argumentatifs par joueur">
+              <button type="button" data-val="0">0</button>
+              <button type="button" data-val="1" class="active">1</button>
+              <button type="button" data-val="2">2</button>
+              <button type="button" data-val="3">3</button>
+            </div>
+          </div>
+        </div>
+
+        <button id="drawCardBtn" class="btn btn-primary" type="button">
+          🎲 Piocher un sujet
+        </button>
+      </div>
+    </section>
+
+    <!-- Carte de débat & Rôles -->
+    <section id="stageCard" class="stage-card" aria-live="polite">
+      <div id="emptyState" class="empty-state">
+        <h2>Prêt à défendre l’indéfendable ?</h2>
+        <p>Sélectionnez les catégories souhaitées, réglez le nombre de connecteurs logiques et de défis argumentatifs, puis cliquez sur <strong>« Piocher un sujet »</strong> pour lancer la manche.</p>
+      </div>
+
+      <div id="activeCardContent" style="display: none;">
+        <div class="topic-header">
+          <span id="currentCategoryBadge" class="topic-category-badge">Catégorie</span>
+          <button id="swapRolesBtn" class="btn btn-sm" type="button">⇄ Inverser les rôles</button>
+        </div>
+
+        <div id="currentTopicText" class="topic-text"></div>
+
+        <div class="roles-grid">
+          <!-- Joueur A -->
+          <div class="player-box player-a">
+            <div class="player-title">
+              <span class="player-name">Joueur A</span>
+              <span id="roleTagA" class="role-tag">Pour / Thèse 1</span>
+            </div>
+            <div id="connectorsBlockA" class="constraint-block">
+              <span class="constraint-heading">Connecteurs imposés (cliquer pour valider)</span>
+              <div id="connectorsListA" class="badges-list"></div>
+            </div>
+            <div id="challengesBlockA" class="constraint-block">
+              <span class="constraint-heading">Défis argumentatifs imposés (cliquer pour valider)</span>
+              <div id="challengesListA" class="badges-list"></div>
+            </div>
+          </div>
+
+          <!-- Joueur B -->
+          <div class="player-box player-b">
+            <div class="player-title">
+              <span class="player-name">Joueur B</span>
+              <span id="roleTagB" class="role-tag">Contre / Thèse 2</span>
+            </div>
+            <div id="connectorsBlockB" class="constraint-block">
+              <span class="constraint-heading">Connecteurs imposés (cliquer pour valider)</span>
+              <div id="connectorsListB" class="badges-list"></div>
+            </div>
+            <div id="challengesBlockB" class="constraint-block">
+              <span class="constraint-heading">Défis argumentatifs imposés (cliquer pour valider)</span>
+              <div id="challengesListB" class="badges-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chronomètre intégré -->
+    <section id="timerBar" class="timer-bar" aria-label="Chronomètre">
+      <div class="timer-phases">
+        <button id="phasePrepBtn" class="phase-btn active" type="button">Préparation</button>
+        <button id="phaseDebateBtn" class="phase-btn" type="button">Débat</button>
+        <div class="duration-input-wrap">
+          <label for="timerMinutesInput">Durée :</label>
+          <input id="timerMinutesInput" type="number" min="1" max="60" value="5">
+          <span>min</span>
+        </div>
+      </div>
+
+      <div class="timer-display-group">
+        <span class="time-up-badge">Temps écoulé !</span>
+        <div id="timerClock" class="timer-clock">05:00</div>
+        <button id="timerStartPauseBtn" class="btn" type="button">▶ Démarrer</button>
+        <button id="timerResetBtn" class="btn" type="button">↺ Réinitialiser</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================
+       ESPACE ORGANISATEUR
+       ======================================================================== -->
+  <footer>
+    <div class="organizer-bar">
+      <div class="organizer-group">
+        <span class="section-label" style="margin-right: 0.35rem;">Espace Organisateur :</span>
+        <button id="manageTopicsBtn" class="btn btn-sm" type="button">📝 Gérer les sujets</button>
+        <button id="manageConnectorsBtn" class="btn btn-sm" type="button">🔗 Gérer les connecteurs</button>
+        <button id="manageChallengesBtn" class="btn btn-sm" type="button">🎯 Gérer les défis argumentatifs</button>
+      </div>
+
+      <div class="organizer-group">
+        <button id="exportJsonBtn" class="btn btn-sm" type="button">⬇ Exporter mes listes (.json)</button>
+        <button id="importJsonBtn" class="btn btn-sm" type="button">⬆ Importer (.json)</button>
+        <input id="importJsonInput" type="file" accept=".json,application/json" style="display: none;">
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       MODALE UNIVERSELLE DE GESTION
+       ======================================================================== -->
+  <div id="manageModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modalTitle">Gestion</h3>
+        <button id="closeModalBtn" class="btn btn-sm" type="button" aria-label="Fermer">✕ Fermer</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+      <div class="modal-footer">
+        <button id="resetDefaultsModalBtn" class="btn btn-sm btn-danger" type="button">Réinitialiser les données par défaut</button>
+        <button id="doneModalBtn" class="btn btn-sm" type="button">Terminer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conteneur des notifications Toast -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <script>
+    /* ========================================================================
+       1. DONNÉES INITIALES (NIVEAU B2 — 64 SUJETS, 42 CONNECTEURS, 12 DÉFIS)
+       ======================================================================== */
+    const DEFAULT_TOPICS = [
+      // Société et vie quotidienne (12)
+      { id: "b2_t1", category: "Société et vie quotidienne", text: "Faut-il interdire complètement les téléphones portables dans les collèges et les lycées ?" },
+      { id: "b2_t2", category: "Société et vie quotidienne", text: "Faut-il rendre le bénévolat obligatoire pour tous les jeunes pendant quelques semaines ?" },
+      { id: "b2_t3", category: "Société et vie quotidienne", text: "La semaine de 4 jours est-elle une bonne solution pour améliorer notre qualité de vie ?" },
+      { id: "b2_t4", category: "Société et vie quotidienne", text: "Le port de l’uniforme à l’école permet-il vraiment de réduire les inégalités entre les élèves ?" },
+      { id: "b2_t5", category: "Société et vie quotidienne", text: "Vaut-il mieux vivre dans une grande ville ou à la campagne aujourd’hui ?" },
+      { id: "b2_t6", category: "Société et vie quotidienne", text: "La politesse a-t-elle vraiment disparu de notre vie quotidienne ou a-t-elle simplement changé ?" },
+      { id: "b2_t7", category: "Société et vie quotidienne", text: "Faut-il rendre les transports en commun gratuits dans toutes les grandes villes ?" },
+      { id: "b2_t8", category: "Société et vie quotidienne", text: "La colocation est-elle une bonne expérience humaine ou une contrainte financière subie ?" },
+      { id: "b2_t9", category: "Société et vie quotidienne", text: "Faut-il interdire les magasins ouverts le dimanche pour protéger la vie de famille ?" },
+      { id: "b2_t10", category: "Société et vie quotidienne", text: "Est-il préférable de payer en espèces ou uniquement par carte bancaire et téléphone ?" },
+      { id: "b2_t11", category: "Société et vie quotidienne", text: "Faut-il abaisser l’âge du droit de vote à 16 ans ?" },
+      { id: "b2_t12", category: "Société et vie quotidienne", text: "Les caméras de surveillance dans les rues nous protègent-elles ou menacent-elles notre vie privée ?" },
+
+      // Travail et études (10)
+      { id: "b2_t13", category: "Travail et études", text: "Le télétravail à 100 % est-il une chance ou un risque d’isolement pour les salariés ?" },
+      { id: "b2_t14", category: "Travail et études", text: "Pour réussir dans la vie professionnelle, les diplômes comptent-ils plus que l’expérience ?" },
+      { id: "b2_t15", category: "Travail et études", text: "Prendre une année sabbatique après le baccalauréat est-il une bonne idée ou une perte de temps ?" },
+      { id: "b2_t16", category: "Travail et études", text: "Faut-il supprimer les notes chiffrées à l’école pour réduire le stress des élèves ?" },
+      { id: "b2_t17", category: "Travail et études", text: "Vaut-il mieux choisir un métier par passion ou pour le salaire ?" },
+      { id: "b2_t18", category: "Travail et études", text: "Changer complètement de métier à 40 ans est-il courageux ou trop risqué ?" },
+      { id: "b2_t19", category: "Travail et études", text: "Le droit à la déconnexion en dehors des horaires de travail est-il vraiment respecté aujourd’hui ?" },
+      { id: "b2_t20", category: "Travail et études", text: "Les cours en ligne peuvent-ils remplacer les cours en présentiel à l’université ?" },
+      { id: "b2_t21", category: "Travail et études", text: "Travailler dans une grande entreprise est-il préférable à travailler dans une petite start-up ?" },
+      { id: "b2_t22", category: "Travail et études", text: "Faut-il supprimer les devoirs à la maison pour les élèves du primaire et du collège ?" },
+
+      // Numérique et médias (10)
+      { id: "b2_t23", category: "Numérique et médias", text: "Les réseaux sociaux nous rapprochent-ils des autres ou nous rendent-ils plus seuls ?" },
+      { id: "b2_t24", category: "Numérique et médias", text: "Faut-il interdire l’anonymat sur Internet pour lutter contre le cyberharcèlement ?" },
+      { id: "b2_t25", category: "Numérique et médias", text: "L’intelligence artificielle est-elle un outil utile pour les étudiants ou un danger pour leur apprentissage ?" },
+      { id: "b2_t26", category: "Numérique et médias", text: "Les influenceurs sur les réseaux sociaux ont-ils une influence plutôt positive ou négative sur les jeunes ?" },
+      { id: "b2_t27", category: "Numérique et médias", text: "Les chaînes d’information en continu nous informent-elles mieux ou créent-elles surtout de l’anxiété ?" },
+      { id: "b2_t28", category: "Numérique et médias", text: "Faut-il interdire les réseaux sociaux aux moins de 15 ans ?" },
+      { id: "b2_t29", category: "Numérique et médias", text: "Peut-on encore faire confiance aux informations que l’on lit sur Internet ?" },
+      { id: "b2_t30", category: "Numérique et médias", text: "Les parents doivent-ils contrôler strictement le temps d’écran de leurs enfants ?" },
+      { id: "b2_t31", category: "Numérique et médias", text: "Les applications de rencontre ont-elles amélioré ou abîmé les relations amoureuses ?" },
+      { id: "b2_t32", category: "Numérique et médias", text: "Est-il possible aujourd’hui de vivre heureux sans smartphone ?" },
+
+      // Écologie et consommation (10)
+      { id: "b2_t33", category: "Écologie et consommation", text: "Faut-il interdire les vols en avion de courte durée quand une alternative en train existe ?" },
+      { id: "b2_t34", category: "Écologie et consommation", text: "La voiture électrique est-elle vraiment une solution écologique pour l’avenir ?" },
+      { id: "b2_t35", category: "Écologie et consommation", text: "Acheter d’occasion est-il un vrai geste écologique ou simplement une mode ?" },
+      { id: "b2_t36", category: "Écologie et consommation", text: "Devrait-on tous réduire notre consommation de viande ou devenir végétariens pour sauver la planète ?" },
+      { id: "b2_t37", category: "Écologie et consommation", text: "Faut-il limiter le nombre de touristes dans les villes et les sites naturels les plus célèbres ?" },
+      { id: "b2_t38", category: "Écologie et consommation", text: "Faut-il taxer davantage les vêtements de la fast-fashion pour encourager une mode plus responsable ?" },
+      { id: "b2_t39", category: "Écologie et consommation", text: "Pour protéger l’environnement, faut-il compter sur les gestes individuels ou sur les lois des gouvernements ?" },
+      { id: "b2_t40", category: "Écologie et consommation", text: "Les achats sur Internet sont-ils en train de tuer les petits commerces de centre-ville ?" },
+      { id: "b2_t41", category: "Écologie et consommation", text: "Faut-il interdire la publicité pour les produits très polluants dans l’espace public ?" },
+      { id: "b2_t42", category: "Écologie et consommation", text: "Peut-on encore voyager loin en avion tout en se disant écologiste ?" },
+
+      // Culture, loisirs et sport (8)
+      { id: "b2_t43", category: "Culture, loisirs et sport", text: "Les plateformes de streaming vont-elles faire disparaître les salles de cinéma ?" },
+      { id: "b2_t44", category: "Culture, loisirs et sport", text: "Les jeux vidéo développent-ils des compétences utiles ou sont-ils surtout une perte de temps ?" },
+      { id: "b2_t45", category: "Culture, loisirs et sport", text: "Le livre papier est-il toujours supérieur à la liseuse électronique ?" },
+      { id: "b2_t46", category: "Culture, loisirs et sport", text: "L’argent a-t-il gâché les valeurs du sport professionnel ?" },
+      { id: "b2_t47", category: "Culture, loisirs et sport", text: "Peut-on vraiment apprendre une langue étrangère avec une application sans professeur ?" },
+      { id: "b2_t48", category: "Culture, loisirs et sport", text: "Les musées devraient-ils être gratuits pour tout le monde toute l’année ?" },
+      { id: "b2_t49", category: "Culture, loisirs et sport", text: "Vaut-il mieux regarder un film en version originale sous-titrée ou en version doublée ?" },
+      { id: "b2_t50", category: "Culture, loisirs et sport", text: "Les grands événements sportifs internationaux (Jeux olympiques, Coupe du monde) coûtent-ils trop cher par rapport à ce qu’ils rapportent ?" },
+
+      // Proverbes et expressions (8)
+      { id: "b2_t51", category: "Proverbes et expressions", text: "« L’argent ne fait pas le bonheur » : êtes-vous d’accord avec ce proverbe ou l’argent est-il indispensable pour être heureux ?" },
+      { id: "b2_t52", category: "Proverbes et expressions", text: "« L’habit ne fait pas le moine » : faut-il se méfier des apparences ou notre façon de nous habiller dit-elle quelque chose de nous ?" },
+      { id: "b2_t53", category: "Proverbes et expressions", text: "« Qui s’assemble se ressemble » : choisit-on des amis qui nous ressemblent ou les contraires s’attirent-ils ?" },
+      { id: "b2_t54", category: "Proverbes et expressions", text: "« Mieux vaut prévenir que guérir » : faut-il toujours tout anticiper ou laisser une place à l’imprévu ?" },
+      { id: "b2_t55", category: "Proverbes et expressions", text: "« Les voyages forment la jeunesse » : est-il indispensable de voyager pour s’ouvrir l’esprit ?" },
+      { id: "b2_t56", category: "Proverbes et expressions", text: "« Tout vient à point à qui sait attendre » : la patience est-elle toujours une qualité dans le monde d’aujourd’hui ?" },
+      { id: "b2_t57", category: "Proverbes et expressions", text: "« L’union fait la force » : travaille-t-on toujours mieux en groupe que seul ?" },
+      { id: "b2_t58", category: "Proverbes et expressions", text: "« Il n’y a que la vérité qui blesse » : faut-il toujours dire toute la vérité à ses proches ?" },
+
+      // Sujets décalés (6)
+      { id: "b2_t59", category: "Sujets décalés", text: "Les chats sont-ils de meilleurs animaux de compagnie que les chiens ?" },
+      { id: "b2_t60", category: "Sujets décalés", text: "Mettre de l’ananas sur une pizza : une excellente idée ou un crime culinaire ?" },
+      { id: "b2_t61", category: "Sujets décalés", text: "Faut-il interdire les décorations et les films de Noël avant le 1er décembre ?" },
+      { id: "b2_t62", category: "Sujets décalés", text: "Raconter la fin d’une série (spoiler) à quelqu’un devrait-il être puni par la loi ?" },
+      { id: "b2_t63", category: "Sujets décalés", text: "Pourrait-on survivre dans un monde sans café ni thé ?" },
+      { id: "b2_t64", category: "Sujets décalés", text: "Si vous pouviez choisir un super-pouvoir, vaudrait-il mieux se téléporter ou voyager dans le temps ?" }
+    ];
+
+    const DEFAULT_CONNECTORS = [
+      "Tout d'abord",
+      "Ensuite",
+      "D'un côté... de l'autre",
+      "Pour conclure",
+      "De plus",
+      "Non seulement... mais aussi",
+      "Par ailleurs",
+      "Puisque",
+      "Grâce à (+ nom)",
+      "À cause de (+ nom)",
+      "Étant donné que",
+      "Donc",
+      "C'est pourquoi",
+      "Par conséquent",
+      "Du coup",
+      "Si bien que",
+      "Cependant",
+      "Pourtant",
+      "En revanche",
+      "Alors que",
+      "Tandis que",
+      "Malgré (+ nom)",
+      "Bien que (+ subjonctif)",
+      "Même si",
+      "Certes... mais",
+      "Toutefois",
+      "Au contraire",
+      "Afin de (+ infinitif)",
+      "Pour que (+ subjonctif)",
+      "Par exemple",
+      "Notamment",
+      "C'est-à-dire",
+      "Autrement dit",
+      "En effet",
+      "D'ailleurs",
+      "À mon avis",
+      "Il me semble que",
+      "Je doute que (+ subjonctif)",
+      "En ce qui concerne",
+      "Quant à (+ nom)",
+      "En résumé",
+      "Finalement"
+    ];
+
+    const DEFAULT_CHALLENGES = [
+      { id: "c1", name: "La concession", hint: "Reconnaître un point valable chez l'adversaire avant de défendre son idée (« Je comprends ton point de vue, mais je pense quand même que… »)" },
+      { id: "c2", name: "L'exemple concret", hint: "Illustrer son argument avec une situation précise de la vie réelle (« Prenons l'exemple d'un étudiant qui travaille à côté de ses cours… »)" },
+      { id: "c3", name: "La question rhétorique", hint: "Poser une question qui pousse l'autre à réfléchir ou dont la réponse est évidente (« Est-ce vraiment possible de vivre sans écran aujourd'hui ? »)" },
+      { id: "c4", name: "La nuance", hint: "Éviter les généralités en précisant les limites de son opinion (« Ce n'est pas toujours vrai, cela dépend beaucoup de la situation… »)" },
+      { id: "c5", name: "L'hypothèse", hint: "Imaginer ce qui se passerait dans un autre scénario (« Si tout le monde travaillait à distance, les centres-villes seraient vides… »)" },
+      { id: "c6", name: "La comparaison", hint: "Comparer deux situations, deux pays ou deux époques (« Contrairement à il y a vingt ans, aujourd'hui nous avons accès à… »)" },
+      { id: "c7", name: "L'exagération (hyperbole)", hint: "Grossir volontairement un trait pour marquer les esprits ou faire sourire (« Sans café le matin, le monde entier s'arrêterait de tourner ! »)" },
+      { id: "c8", name: "La reformulation", hint: "Réexpliquer son idée plus clairement pour être sûr d'être compris (« Autrement dit, le problème ne vient pas de l'outil, mais de son usage. »)" },
+      { id: "c9", name: "L'expérience personnelle", hint: "S'appuyer sur quelque chose que l'on a vécu ou observé (« Personnellement, j'ai remarqué que lorsque je… »)" },
+      { id: "c10", name: "La projection dans le futur", hint: "Imaginer les conséquences à long terme (« Dans dix ans, si nous ne changeons rien, nous risquons de… »)" },
+      { id: "c11", name: "Le chiffre ou le fait d'actualité", hint: "S'appuyer sur une tendance connue ou un fait récent (« On sait aujourd'hui que de plus en plus de villes européennes choisissent de… »)" },
+      { id: "c12", name: "La conclusion percutante", hint: "Terminer son intervention par une phrase claire et mémorable (« En résumé, il ne s'agit pas d'interdire, mais d'apprendre à mieux utiliser. »)" }
+    ];
+
+    const STORAGE_KEY = "avocat_diable_b2_data_v1";
+
+    /* ========================================================================
+       2. ÉTAT DE L'APPLICATION
+       ======================================================================== */
+    let appData = loadData();
+    let activeCategories = new Set(getUniqueCategories());
+    let drawnTopicIds = new Set();
+
+    let connectorCount = 3;
+    let challengeCount = 1;
+    let rolesSwapped = false;
+    let currentDraw = null; // { topic, connA, connB, chalA, chalB }
+
+    // Chronomètre (5 min préparation, 8 min débat par défaut)
+    let timerState = {
+      phase: "prep", // "prep" | "debate"
+      prepMinutes: 5,
+      debateMinutes: 8,
+      secondsLeft: 5 * 60,
+      running: false,
+      intervalId: null
+    };
+
+    let currentModalType = null; // "topics" | "connectors" | "challenges"
+
+    /* ========================================================================
+       3. PERSISTANCE LOCALSTORAGE & UTILITAIRES
+       ======================================================================== */
+    function cloneDefaults() {
+      return {
+        topics: JSON.parse(JSON.stringify(DEFAULT_TOPICS)),
+        connectors: JSON.parse(JSON.stringify(DEFAULT_CONNECTORS)),
+        challenges: JSON.parse(JSON.stringify(DEFAULT_CHALLENGES))
+      };
+    }
+
+    function loadData() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return cloneDefaults();
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed.topics) && Array.isArray(parsed.connectors) && Array.isArray(parsed.challenges)) {
+          return parsed;
+        }
+      } catch (e) {
+        console.warn("Erreur de lecture localStorage, restauration par défaut.", e);
+      }
+      return cloneDefaults();
+    }
+
+    function saveData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+      } catch (e) {
+        showToast("Impossible de sauvegarder dans le navigateur.");
+      }
+    }
+
+    function getUniqueCategories() {
+      const cats = [];
+      appData.topics.forEach(t => {
+        if (!cats.includes(t.category)) cats.push(t.category);
+      });
+      return cats;
+    }
+
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function showToast(message) {
+      const container = document.getElementById("toastContainer");
+      const el = document.createElement("div");
+      el.className = "toast";
+      el.textContent = message;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = "0";
+        el.style.transition = "opacity 0.25s ease";
+        setTimeout(() => el.remove(), 260);
+      }, 2800);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    /* ========================================================================
+       4. RENDU DES CATÉGORIES & COMPTEUR DE PIOCHE
+       ======================================================================== */
+    function renderCategories() {
+      const container = document.getElementById("categoriesContainer");
+      container.innerHTML = "";
+      const cats = getUniqueCategories();
+
+      cats.forEach(cat => {
+        const totalInCat = appData.topics.filter(t => t.category === cat).length;
+        const remainingInCat = appData.topics.filter(t => t.category === cat && !drawnTopicIds.has(t.id)).length;
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "cat-chip" + (activeCategories.has(cat) ? " active" : "");
+        btn.innerHTML = `<span>${escapeHtml(cat)}</span> <span class="cat-count">(${remainingInCat}/${totalInCat})</span>`;
+        btn.addEventListener("click", () => {
+          if (activeCategories.has(cat)) {
+            activeCategories.delete(cat);
+          } else {
+            activeCategories.add(cat);
+          }
+          renderCategories();
+          updateDeckCounter();
+        });
+        container.appendChild(btn);
+      });
+
+      const toggleBtn = document.getElementById("toggleAllCatsBtn");
+      toggleBtn.textContent = activeCategories.size === cats.length ? "Tout désélectionner" : "Tout sélectionner";
+    }
+
+    function getEligibleTopics() {
+      return appData.topics.filter(t => activeCategories.has(t.category) && !drawnTopicIds.has(t.id));
+    }
+
+    function updateDeckCounter() {
+      const totalEligibleAll = appData.topics.filter(t => activeCategories.has(t.category)).length;
+      const remainingEligible = getEligibleTopics().length;
+      const counterEl = document.getElementById("deckCounter");
+      counterEl.textContent = `${remainingEligible} / ${totalEligibleAll} cartes restantes`;
+    }
+
+    /* ========================================================================
+       5. TIRAGE DE CARTE, CONNECTEURS & DÉFIS ARGUMENTATIFS
+       ======================================================================== */
+    function drawCard() {
+      const pool = getEligibleTopics();
+      if (pool.length === 0) {
+        if (activeCategories.size === 0) {
+          showToast("Veuillez sélectionner au moins une catégorie.");
+        } else {
+          showToast("Toutes les cartes des catégories sélectionnées ont été piochées ! Réinitialisez la pioche.");
+        }
+        return;
+      }
+
+      const topic = pool[Math.floor(Math.random() * pool.length)];
+      drawnTopicIds.add(topic.id);
+
+      // Tirage des connecteurs sans doublon entre A et B
+      const shuffledConn = shuffleArray(appData.connectors);
+      const totalConnNeeded = connectorCount * 2;
+      const connA = shuffledConn.slice(0, connectorCount);
+      const connB = shuffledConn.slice(connectorCount, Math.min(totalConnNeeded, shuffledConn.length));
+
+      // Tirage des défis argumentatifs sans doublon entre A et B
+      const shuffledChal = shuffleArray(appData.challenges);
+      const totalChalNeeded = challengeCount * 2;
+      const chalA = shuffledChal.slice(0, challengeCount);
+      const chalB = shuffledChal.slice(challengeCount, Math.min(totalChalNeeded, shuffledChal.length));
+
+      currentDraw = { topic, connA, connB, chalA, chalB };
+      rolesSwapped = false;
+
+      renderCurrentCard(true);
+      renderCategories();
+      updateDeckCounter();
+    }
+
+    function renderCurrentCard(animate = false) {
+      if (!currentDraw) return;
+
+      const stage = document.getElementById("stageCard");
+      document.getElementById("emptyState").style.display = "none";
+      document.getElementById("activeCardContent").style.display = "block";
+
+      if (animate) {
+        stage.classList.remove("animate-draw");
+        void stage.offsetWidth; // Force reflow
+        stage.classList.add("animate-draw");
+      }
+
+      document.getElementById("currentCategoryBadge").textContent = currentDraw.topic.category;
+      document.getElementById("currentTopicText").textContent = currentDraw.topic.text;
+
+      updateRoleLabels();
+
+      // Connecteurs
+      renderConnectorsList("connectorsBlockA", "connectorsListA", currentDraw.connA);
+      renderConnectorsList("connectorsBlockB", "connectorsListB", currentDraw.connB);
+
+      // Défis argumentatifs
+      renderChallengesList("challengesBlockA", "challengesListA", currentDraw.chalA);
+      renderChallengesList("challengesBlockB", "challengesListB", currentDraw.chalB);
+    }
+
+    function updateRoleLabels() {
+      const roleA = document.getElementById("roleTagA");
+      const roleB = document.getElementById("roleTagB");
+      if (!rolesSwapped) {
+        roleA.textContent = "Pour / Thèse 1";
+        roleB.textContent = "Contre / Thèse 2";
+      } else {
+        roleA.textContent = "Contre / Thèse 2";
+        roleB.textContent = "Pour / Thèse 1";
+      }
+    }
+
+    function renderConnectorsList(blockId, listId, items) {
+      const block = document.getElementById(blockId);
+      const list = document.getElementById(listId);
+      list.innerHTML = "";
+
+      if (connectorCount === 0 || items.length === 0) {
+        block.style.display = "none";
+        return;
+      }
+      block.style.display = "flex";
+
+      items.forEach(text => {
+        const badge = document.createElement("div");
+        badge.className = "item-badge";
+        badge.setAttribute("role", "button");
+        badge.setAttribute("tabindex", "0");
+        badge.innerHTML = `<span class="check-mark">✓</span><span class="item-label">${escapeHtml(text)}</span>`;
+        const toggleUsed = () => badge.classList.toggle("used");
+        badge.addEventListener("click", toggleUsed);
+        badge.addEventListener("keydown", e => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggleUsed();
+          }
+        });
+        list.appendChild(badge);
+      });
+    }
+
+    function renderChallengesList(blockId, listId, items) {
+      const block = document.getElementById(blockId);
+      const list = document.getElementById(listId);
+      list.innerHTML = "";
+
+      if (challengeCount === 0 || items.length === 0) {
+        block.style.display = "none";
+        return;
+      }
+      block.style.display = "flex";
+
+      items.forEach(chal => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "challenge-wrapper";
+
+        const row = document.createElement("div");
+        row.className = "challenge-row";
+
+        const badge = document.createElement("div");
+        badge.className = "item-badge";
+        badge.setAttribute("role", "button");
+        badge.setAttribute("tabindex", "0");
+        badge.title = chal.hint || "";
+        badge.innerHTML = `<span class="check-mark">✓</span><strong class="item-label">${escapeHtml(chal.name)}</strong>`;
+
+        const toggleUsed = () => badge.classList.toggle("used");
+        badge.addEventListener("click", toggleUsed);
+        badge.addEventListener("keydown", e => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggleUsed();
+          }
+        });
+
+        row.appendChild(badge);
+
+        if (chal.hint && chal.hint.trim() !== "") {
+          const helpBtn = document.createElement("button");
+          helpBtn.type = "button";
+          helpBtn.className = "help-btn";
+          helpBtn.textContent = "?";
+          helpBtn.title = "Afficher le conseil et un exemple";
+
+          const hintBox = document.createElement("div");
+          hintBox.className = "challenge-hint";
+          hintBox.textContent = chal.hint;
+
+          helpBtn.addEventListener("click", () => {
+            const isOpen = hintBox.classList.toggle("visible");
+            helpBtn.classList.toggle("open", isOpen);
+          });
+
+          row.appendChild(helpBtn);
+          wrapper.appendChild(row);
+          wrapper.appendChild(hintBox);
+        } else {
+          wrapper.appendChild(row);
+        }
+
+        list.appendChild(wrapper);
+      });
+    }
+
+    /* ========================================================================
+       6. CHRONOMÈTRE INTÉGRÉ
+       ======================================================================== */
+    function formatTime(totalSeconds) {
+      const m = Math.floor(totalSeconds / 60);
+      const s = totalSeconds % 60;
+      return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    }
+
+    function updateTimerUI() {
+      document.getElementById("timerClock").textContent = formatTime(timerState.secondsLeft);
+      const startBtn = document.getElementById("timerStartPauseBtn");
+      startBtn.textContent = timerState.running ? "⏸ Pause" : "▶ Démarrer";
+
+      const timerBar = document.getElementById("timerBar");
+      if (timerState.secondsLeft === 0) {
+        timerBar.classList.add("time-up");
+      } else {
+        timerBar.classList.remove("time-up");
+      }
+    }
+
+    function stopTimer() {
+      if (timerState.intervalId) {
+        clearInterval(timerState.intervalId);
+        timerState.intervalId = null;
+      }
+      timerState.running = false;
+      updateTimerUI();
+    }
+
+    function setTimerPhase(phase) {
+      stopTimer();
+      timerState.phase = phase;
+      const mins = phase === "prep" ? timerState.prepMinutes : timerState.debateMinutes;
+      timerState.secondsLeft = mins * 60;
+
+      document.getElementById("phasePrepBtn").classList.toggle("active", phase === "prep");
+      document.getElementById("phaseDebateBtn").classList.toggle("active", phase === "debate");
+      document.getElementById("timerMinutesInput").value = mins;
+      updateTimerUI();
+    }
+
+    function playChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(523.25, ctx.currentTime); // Do5
+        osc.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.2); // Mi5
+        gain.gain.setValueAtTime(0.18, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.9);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.9);
+      } catch (e) {
+        // Silencieux si l'audio est bloqué par le navigateur
+      }
+    }
+
+    /* ========================================================================
+       7. ESPACE ORGANISATEUR (MODALES DE GESTION CRUD + EXPORT/IMPORT)
+       ======================================================================== */
+    function openManageModal(type) {
+      currentModalType = type;
+      const titleEl = document.getElementById("modalTitle");
+      if (type === "topics") titleEl.textContent = "Gérer les sujets de débat";
+      if (type === "connectors") titleEl.textContent = "Gérer les connecteurs logiques";
+      if (type === "challenges") titleEl.textContent = "Gérer les défis argumentatifs";
+
+      renderModalContent();
+      document.getElementById("manageModal").classList.add("open");
+    }
+
+    function closeManageModal() {
+      document.getElementById("manageModal").classList.remove("open");
+      currentModalType = null;
+    }
+
+    function renderModalContent() {
+      const body = document.getElementById("modalBody");
+      body.innerHTML = "";
+
+      if (currentModalType === "topics") {
+        // Formulaire d'ajout de sujet
+        const cats = getUniqueCategories();
+        const form = document.createElement("div");
+        form.className = "form-row";
+        form.innerHTML = `
+          <input id="newTopicCat" class="form-control" list="catDatalist" placeholder="Catégorie (existante ou nouvelle)" style="max-width: 240px;">
+          <datalist id="catDatalist">${cats.map(c => `<option value="${escapeHtml(c)}"></option>`).join("")}</datalist>
+          <input id="newTopicText" class="form-control" placeholder="Intitulé du nouveau sujet de débat...">
+          <button id="addTopicBtn" class="btn btn-primary btn-sm" type="button">+ Ajouter</button>
+        `;
+        body.appendChild(form);
+
+        form.querySelector("#addTopicBtn").addEventListener("click", () => {
+          const cat = form.querySelector("#newTopicCat").value.trim() || "Personnalisés";
+          const text = form.querySelector("#newTopicText").value.trim();
+          if (!text) return showToast("Veuillez saisir un intitulé de sujet.");
+          appData.topics.unshift({ id: "t_" + Date.now(), category: cat, text });
+          activeCategories.add(cat);
+          saveData();
+          renderCategories();
+          updateDeckCounter();
+          renderModalContent();
+          showToast("Sujet ajouté.");
+        });
+
+        // Liste des sujets
+        const list = document.createElement("div");
+        list.className = "manage-list";
+        appData.topics.forEach((topic, idx) => {
+          const row = document.createElement("div");
+          row.className = "manage-item";
+          row.innerHTML = `
+            <div class="manage-item-content">
+              <strong>${escapeHtml(topic.text)}</strong>
+              <span class="manage-item-sub">${escapeHtml(topic.category)}</span>
+            </div>
+            <div class="manage-item-actions">
+              <button class="btn btn-sm edit-btn" type="button">Modifier</button>
+              <button class="btn btn-sm btn-danger del-btn" type="button">Suppr.</button>
+            </div>
+          `;
+          row.querySelector(".del-btn").addEventListener("click", () => {
+            appData.topics.splice(idx, 1);
+            saveData();
+            renderCategories();
+            updateDeckCounter();
+            renderModalContent();
+          });
+          row.querySelector(".edit-btn").addEventListener("click", () => {
+            row.innerHTML = `
+              <div class="form-row" style="width:100%;">
+                <input class="form-control edit-cat" value="${escapeHtml(topic.category)}" style="max-width:210px;">
+                <input class="form-control edit-text" value="${escapeHtml(topic.text)}">
+                <button class="btn btn-sm save-edit-btn" type="button">OK</button>
+              </div>
+            `;
+            row.querySelector(".save-edit-btn").addEventListener("click", () => {
+              const newCat = row.querySelector(".edit-cat").value.trim() || topic.category;
+              const newTxt = row.querySelector(".edit-text").value.trim();
+              if (!newTxt) return;
+              topic.category = newCat;
+              topic.text = newTxt;
+              activeCategories.add(newCat);
+              saveData();
+              renderCategories();
+              updateDeckCounter();
+              renderModalContent();
+            });
+          });
+          list.appendChild(row);
+        });
+        body.appendChild(list);
+
+      } else if (currentModalType === "connectors") {
+        // Formulaire d'ajout de connecteur
+        const form = document.createElement("div");
+        form.className = "form-row";
+        form.innerHTML = `
+          <input id="newConnText" class="form-control" placeholder="Nouveau connecteur logique (ex. Pour ma part)...">
+          <button id="addConnBtn" class="btn btn-primary btn-sm" type="button">+ Ajouter</button>
+        `;
+        body.appendChild(form);
+
+        form.querySelector("#addConnBtn").addEventListener("click", () => {
+          const val = form.querySelector("#newConnText").value.trim();
+          if (!val) return showToast("Veuillez saisir un connecteur.");
+          appData.connectors.unshift(val);
+          saveData();
+          renderModalContent();
+          showToast("Connecteur ajouté.");
+        });
+
+        const list = document.createElement("div");
+        list.className = "manage-list";
+        appData.connectors.forEach((conn, idx) => {
+          const row = document.createElement("div");
+          row.className = "manage-item";
+          row.innerHTML = `
+            <div class="manage-item-content"><strong>${escapeHtml(conn)}</strong></div>
+            <div class="manage-item-actions">
+              <button class="btn btn-sm edit-btn" type="button">Modifier</button>
+              <button class="btn btn-sm btn-danger del-btn" type="button">Suppr.</button>
+            </div>
+          `;
+          row.querySelector(".del-btn").addEventListener("click", () => {
+            appData.connectors.splice(idx, 1);
+            saveData();
+            renderModalContent();
+          });
+          row.querySelector(".edit-btn").addEventListener("click", () => {
+            row.innerHTML = `
+              <div class="form-row" style="width:100%;">
+                <input class="form-control edit-val" value="${escapeHtml(conn)}">
+                <button class="btn btn-sm save-edit-btn" type="button">OK</button>
+              </div>
+            `;
+            row.querySelector(".save-edit-btn").addEventListener("click", () => {
+              const newVal = row.querySelector(".edit-val").value.trim();
+              if (!newVal) return;
+              appData.connectors[idx] = newVal;
+              saveData();
+              renderModalContent();
+            });
+          });
+          list.appendChild(row);
+        });
+        body.appendChild(list);
+
+      } else if (currentModalType === "challenges") {
+        // Formulaire d'ajout de défi argumentatif
+        const form = document.createElement("div");
+        form.className = "form-row";
+        form.innerHTML = `
+          <input id="newChalName" class="form-control" placeholder="Nom (ex. Le témoignage)" style="max-width: 220px;">
+          <input id="newChalHint" class="form-control" placeholder="Conseil et exemple concret (affiché au clic sur ?)...">
+          <button id="addChalBtn" class="btn btn-primary btn-sm" type="button">+ Ajouter</button>
+        `;
+        body.appendChild(form);
+
+        form.querySelector("#addChalBtn").addEventListener("click", () => {
+          const name = form.querySelector("#newChalName").value.trim();
+          const hint = form.querySelector("#newChalHint").value.trim();
+          if (!name) return showToast("Veuillez saisir le nom du défi argumentatif.");
+          appData.challenges.unshift({ id: "c_" + Date.now(), name, hint });
+          saveData();
+          renderModalContent();
+          showToast("Défi argumentatif ajouté.");
+        });
+
+        const list = document.createElement("div");
+        list.className = "manage-list";
+        appData.challenges.forEach((chal, idx) => {
+          const row = document.createElement("div");
+          row.className = "manage-item";
+          row.innerHTML = `
+            <div class="manage-item-content">
+              <strong>${escapeHtml(chal.name)}</strong>
+              <span class="manage-item-sub">${escapeHtml(chal.hint || "Aucune aide renseignée")}</span>
+            </div>
+            <div class="manage-item-actions">
+              <button class="btn btn-sm edit-btn" type="button">Modifier</button>
+              <button class="btn btn-sm btn-danger del-btn" type="button">Suppr.</button>
+            </div>
+          `;
+          row.querySelector(".del-btn").addEventListener("click", () => {
+            appData.challenges.splice(idx, 1);
+            saveData();
+            renderModalContent();
+          });
+          row.querySelector(".edit-btn").addEventListener("click", () => {
+            row.innerHTML = `
+              <div class="form-row" style="width:100%;">
+                <input class="form-control edit-name" value="${escapeHtml(chal.name)}" style="max-width:200px;">
+                <input class="form-control edit-hint" value="${escapeHtml(chal.hint || "")}">
+                <button class="btn btn-sm save-edit-btn" type="button">OK</button>
+              </div>
+            `;
+            row.querySelector(".save-edit-btn").addEventListener("click", () => {
+              const newName = row.querySelector(".edit-name").value.trim();
+              const newHint = row.querySelector(".edit-hint").value.trim();
+              if (!newName) return;
+              chal.name = newName;
+              chal.hint = newHint;
+              saveData();
+              renderModalContent();
+            });
+          });
+          list.appendChild(row);
+        });
+        body.appendChild(list);
+      }
+    }
+
+    function exportJson() {
+      const payload = JSON.stringify(appData, null, 2);
+      const blob = new Blob([payload], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "avocat-du-diable-b2-listes.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      showToast("Listes exportées en JSON.");
+    }
+
+    function importJson(file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (!Array.isArray(parsed.topics) || !Array.isArray(parsed.connectors) || !Array.isArray(parsed.challenges)) {
+            throw new Error("Format invalide");
+          }
+          appData = parsed;
+          drawnTopicIds.clear();
+          activeCategories = new Set(getUniqueCategories());
+          saveData();
+          renderCategories();
+          updateDeckCounter();
+          showToast("Listes importées avec succès !");
+        } catch (err) {
+          showToast("Fichier JSON invalide ou incomplet.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    /* ========================================================================
+       8. ÉCOUTEURS D'ÉVÉNEMENTS & INITIALISATION
+       ======================================================================== */
+    document.getElementById("drawCardBtn").addEventListener("click", drawCard);
+
+    document.getElementById("resetDeckBtn").addEventListener("click", () => {
+      drawnTopicIds.clear();
+      renderCategories();
+      updateDeckCounter();
+      showToast("Toutes les cartes ont été remises dans la pioche.");
+    });
+
+    document.getElementById("toggleAllCatsBtn").addEventListener("click", () => {
+      const cats = getUniqueCategories();
+      if (activeCategories.size === cats.length) {
+        activeCategories.clear();
+      } else {
+        activeCategories = new Set(cats);
+      }
+      renderCategories();
+      updateDeckCounter();
+    });
+
+    document.getElementById("swapRolesBtn").addEventListener("click", () => {
+      rolesSwapped = !rolesSwapped;
+      updateRoleLabels();
+    });
+
+    // Sélecteur connecteurs (0 à 5)
+    document.querySelectorAll("#connectorCountSelector button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#connectorCountSelector button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        connectorCount = Number(btn.dataset.val);
+      });
+    });
+
+    // Sélecteur défis argumentatifs (0 à 3)
+    document.querySelectorAll("#challengeCountSelector button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#challengeCountSelector button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        challengeCount = Number(btn.dataset.val);
+      });
+    });
+
+    // Chronomètre
+    document.getElementById("phasePrepBtn").addEventListener("click", () => setTimerPhase("prep"));
+    document.getElementById("phaseDebateBtn").addEventListener("click", () => setTimerPhase("debate"));
+
+    document.getElementById("timerMinutesInput").addEventListener("change", e => {
+      let val = parseInt(e.target.value, 10);
+      if (isNaN(val) || val < 1) val = 1;
+      if (val > 60) val = 60;
+      e.target.value = val;
+      if (timerState.phase === "prep") timerState.prepMinutes = val;
+      else timerState.debateMinutes = val;
+      if (!timerState.running) {
+        timerState.secondsLeft = val * 60;
+        updateTimerUI();
+      }
+    });
+
+    document.getElementById("timerStartPauseBtn").addEventListener("click", () => {
+      if (timerState.running) {
+        stopTimer();
+      } else {
+        if (timerState.secondsLeft === 0) {
+          const mins = timerState.phase === "prep" ? timerState.prepMinutes : timerState.debateMinutes;
+          timerState.secondsLeft = mins * 60;
+        }
+        timerState.running = true;
+        updateTimerUI();
+        timerState.intervalId = setInterval(() => {
+          if (timerState.secondsLeft > 0) {
+            timerState.secondsLeft--;
+            updateTimerUI();
+            if (timerState.secondsLeft === 0) {
+              stopTimer();
+              playChime();
+            }
+          }
+        }, 1000);
+      }
+    });
+
+    document.getElementById("timerResetBtn").addEventListener("click", () => {
+      setTimerPhase(timerState.phase);
+    });
+
+    // Modales & Organisateur
+    document.getElementById("manageTopicsBtn").addEventListener("click", () => openManageModal("topics"));
+    document.getElementById("manageConnectorsBtn").addEventListener("click", () => openManageModal("connectors"));
+    document.getElementById("manageChallengesBtn").addEventListener("click", () => openManageModal("challenges"));
+    document.getElementById("closeModalBtn").addEventListener("click", closeManageModal);
+    document.getElementById("doneModalBtn").addEventListener("click", closeManageModal);
+    document.getElementById("manageModal").addEventListener("click", e => {
+      if (e.target.id === "manageModal") closeManageModal();
+    });
+
+    document.getElementById("resetDefaultsModalBtn").addEventListener("click", () => {
+      const defaults = cloneDefaults();
+      if (currentModalType === "topics") {
+        appData.topics = defaults.topics;
+        drawnTopicIds.clear();
+        activeCategories = new Set(getUniqueCategories());
+        renderCategories();
+        updateDeckCounter();
+      } else if (currentModalType === "connectors") {
+        appData.connectors = defaults.connectors;
+      } else if (currentModalType === "challenges") {
+        appData.challenges = defaults.challenges;
+      }
+      saveData();
+      renderModalContent();
+      showToast("Données par défaut restaurées.");
+    });
+
+    document.getElementById("exportJsonBtn").addEventListener("click", exportJson);
+    document.getElementById("importJsonBtn").addEventListener("click", () => {
+      document.getElementById("importJsonInput").click();
+    });
+    document.getElementById("importJsonInput").addEventListener("change", e => {
+      if (e.target.files && e.target.files[0]) {
+        importJson(e.target.files[0]);
+        e.target.value = "";
+      }
+    });
+
+    // Initialisation au chargement
+    renderCategories();
+    updateDeckCounter();
+    updateTimerUI();
+  </script>
+</body>
+</html>
